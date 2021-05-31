@@ -1,9 +1,9 @@
 const { Keypair, Networks, Operation, TransactionBuilder } = require('stellar-sdk');
 const { filter, find } = require('lodash');
-const ChallengeKeypair = require('../ChallengeKeypair');
+const challengeKeypair = require('../challengeKeypair');
 const { server, transactionOptions } = require('./../testserver.js');
 
-const additionalSignerKeypair = ChallengeKeypair('SQ01_ADDITIONAL_SIGNER');
+const additionalSignerKeypair = () => challengeKeypair('Additional Signer Keypair', 'SQ0104_ADDITIONAL_SIGNER');
 
 const verifyChallenge = async (publicKey) => {
     const keypairHint = Keypair.fromPublicKey(publicKey).signatureHint();
@@ -63,16 +63,19 @@ const challenge = async (challengeKeypair, additionalSignerKeypair) => {
             return result;
         });
 };
-module.exports = { quest: challenge, verify: verifyChallenge, additionalSignerKeypair: additionalSignerKeypair };
 
 if (require.main === module) {
     const { AccountResponse } = require('stellar-sdk');
-    const keypair = ChallengeKeypair('SQ01_SECRET_KEY');
-    challenge(keypair).then(res => {
-        if (res instanceof AccountResponse) {
-            console.log(res.account_id);
-        } else {
-            console.log(res);
-        }
-    });
+    challengeKeypair('Challenge Keypair', 'SQ01_SECRET_KEY')
+        .then(keypair => additionalSignerKeypair().then(additionalKeypair => ({keypair: keypair, additionalKeypair: additionalKeypair})))
+        .then(({keypair, additionalKeypair}) => challenge(keypair, additionalKeypair))
+        .then(res => {
+            if (res instanceof AccountResponse) {
+                console.log(res.account_id);
+            } else {
+                console.log(res);
+            }
+        });
+} else {
+    module.exports = { quest: challenge, verify: verifyChallenge, };
 }

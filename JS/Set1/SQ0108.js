@@ -58,13 +58,14 @@ module.exports = { quest: challenge, verify: verifyChallenge };
 
 if (require.main === module) {
     const { AccountResponse } = require('stellar-sdk');
-    const ChallengeKeypair = require('../ChallengeKeypair');
-    const keypair = ChallengeKeypair('SQ01_SECRET_KEY');
-    challenge(keypair).then(res => {
-        if (res instanceof AccountResponse) {
-            console.log(res.account_id);
-        } else {
-            console.log(res);
-        }
-    });
+    const challengeKeypair = require('../challengeKeypair');
+    challengeKeypair('Challenge Keypair', 'SQ01_SECRET_KEY')
+        .then(keypair => challenge(keypair))
+        .then(res => {
+            if (res instanceof AccountResponse) {
+                console.log(res.account_id);
+            } else {
+                console.log(res);
+            }
+        });
 }

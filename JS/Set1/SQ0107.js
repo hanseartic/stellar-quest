@@ -1,7 +1,6 @@
 const { TransactionBuilder, Asset, Operation, } = require("stellar-sdk");
 const { filter } = require('lodash');
 const { server, transactionOptions } = require('./../testserver.js');
-const { additionalSignerKeypair: channelKeypair } = require('./SQ0104');
 
 const verifyChallenge = async (publicKey) => {
     return await server.loadAccount(publicKey)
@@ -52,13 +51,16 @@ module.exports = { quest: challenge, verify: verifyChallenge };
 
 if (require.main === module) {
     const { AccountResponse } = require('stellar-sdk');
-    const ChallengeKeypair = require('../ChallengeKeypair');
-    const keypair = ChallengeKeypair('SQ01_SECRET_KEY');
-    challenge(keypair, channelKeypair).then(res => {
-        if (res instanceof AccountResponse) {
-            console.log(res.account_id);
-        } else {
-            console.log(res);
-        }
-    });
+    const challengeKeypair = require('../challengeKeypair');
+    const channelKeypair = () => challengeKeypair('Channel Account secret', 'SQ0107_CHANNEL_SECRET_KEY');
+    challengeKeypair('Challenge Keypair', 'SQ01_SECRET_KEY')
+        .then(keypair => channelKeypair().then(channelKeypair => ({keypair: keypair, channelKeypair: channelKeypair})))
+        .then(({keypair, channelKeypair}) => challenge(keypair, channelKeypair))
+        .then(res => {
+            if (res instanceof AccountResponse) {
+                console.log(res.account_id);
+            } else {
+                console.log(res);
+            }
+        });
 }
