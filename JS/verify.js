@@ -14,6 +14,10 @@ app.get('/verify/:quest/:account_id', (req, res) => {
             .then(result => {
                 process.stdout.write(result+"\n");
                 return res.json({ account: accountId, verified: result});
+            })
+            .catch(reason => {
+                process.stdout.write(reason+"\n");
+                return res.json({body: accountId, verified: false, reason: reason.response.extras?.reason??reason.response.detail})
             });
     } catch (err) {
         process.stdout.write("Quest does not exist\n");
