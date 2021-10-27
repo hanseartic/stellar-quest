@@ -93,7 +93,7 @@ module.exports = { quest: challenge, verify: verifyChallenge };
 if (require.main === module) {
     const { AccountResponse } = require('stellar-sdk');
     const challengeKeypair = require('../challengeKeypair');
-    challengeKeypair('Quest Keypair', 'SQ0301_SECRET_KEY')
+    challengeKeypair('Quest Keypair', 'SQ0305_SECRET_KEY')
         .then(keypair => challenge(keypair))
         .then(res => {
             if (res instanceof AccountResponse) {

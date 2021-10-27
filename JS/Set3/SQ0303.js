@@ -82,7 +82,7 @@ if (require.main === module) {
     const { AccountResponse } = require('stellar-sdk');
     const challengeKeypair = require('../challengeKeypair');
     const readVar = require('../readVar');
-    challengeKeypair('Quest Keypair', 'SQ0301_SECRET_KEY')
+    challengeKeypair('Quest Keypair', 'SQ0303_SECRET_KEY')
         .then(keypair => readVar('Please enter the desired signer: ', 'SQ0303_RIDDLE')
             .then(riddle => ({keypair, riddle}))
         )
