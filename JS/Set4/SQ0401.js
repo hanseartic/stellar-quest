@@ -12,7 +12,7 @@ const accounts = [
 const challenge = (accounts, target) => {
     accounts.forEach(({secret, preImage}) => {
         const accountKey = Keypair.fromSecret(secret);
-        const preImageSigner = Buffer.from(preImage).toString('hex');
+        const preImageSigner = Buffer.from(preImage);
         console.log(accountKey.publicKey(), preImageSigner);
 
         server.loadAccount(accountKey.publicKey())
