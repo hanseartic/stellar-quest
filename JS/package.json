@@ -25,7 +25,7 @@
     "node-fetch": "^2.6.7",
     "sha256": "^0.2.0",
     "stellar-account-helper": "github:hanseartic/stellar-account-helper",
-    "stellar-sdk": "^9.0.1",
+    "stellar-sdk": "^9.1.0",
     "zero-fill": "^2.2.4"
   }
 }
